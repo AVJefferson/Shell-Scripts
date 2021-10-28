@@ -1,12 +1,15 @@
-# Ubuntu Init Shell Script
+# LINUX ESSENTIAL SCRIPTS
 A highly customizable package installation, de-bloater and initial personalization shell script.
 
-## SETUP_CONFIGURATION
-These Variables are used to customize the [bash script](install.sh)
+# PACKAGE INSTALLER
+
+## SETUP CONFIGURATION
+These Variables are used to customize the way the [bash script](Package%20Installer/install.sh) executes.
 
 ### LINUX and APT UPGRADATIONS
-    upgradeLinux=false
     upgradeApt=true
+    upgradeLinux=false
+    
 
 ### SNAP STORE REMOVAL
     purgeSnap=false
@@ -14,17 +17,11 @@ These Variables are used to customize the [bash script](install.sh)
 
 ### PACKAGE INSTALLATION
     p_manager="aptitude"
-    conf=".config"
+    conf="pkg.list"
     showNMessage=false
 
-### LINUX PERSONALIZATION
-    addAlias=false
-    disableUbuntuDock=false
-further personalizations commands are yet to be added
-
-
 ## PACKAGE LIST
-**IMP: Edit this file to select the packages you wish to install/uninstall before executing the shell script.** The packages to be installed are stored in [.config file](.config). This filename can also be changed using the $conf variable.
+**IMP: Edit the [package list file](Package%20Installer/pkg.list) to select/Unselect the packages (using Y/N) you choose to (un)install before executing the shell script.** The packages to be installed are stored in. This filename can also be changed using the $conf variable.
 
 ### COMMENTS
 Everything beginnning with \# are read as comments and are not processed.
@@ -41,3 +38,12 @@ Packages are to be listed as `[YN] [IPC] package-name`. They should be written i
   * P - Purge, Uninstals the package (if Yes Selected).
   * C - Comment, Prints (echo) the content to terminal.
 * package-name - Self explanatory. Wild Cards are also allowed.
+
+
+
+# LINUX PERSONALIZATION
+
+## PERSONALIZATION CONFIGURATION
+    addAlias=false
+    disableUbuntuDock=false
+further personalizations commands are yet to be added

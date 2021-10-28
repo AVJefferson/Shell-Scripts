@@ -12,7 +12,7 @@ purgeGnomeStore=false
 
 # PACKAGE INSTALLATION
 p_manager="aptitude" # Note that apt and aptitude handles regular expressions differently
-conf="pkglist"
+conf="pkg.list"
 showNMessage=false # N selected commands in .config are not displayed
 
 # CREATING A SNAPSHOT OF EXISTING PACKAGES
