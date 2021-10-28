@@ -1,0 +1,95 @@
+#!/bin/sh
+
+# (Y/N) | exec-type | Package-Name
+
+# (Y/N)
+# Y - Yes, The package action is executed
+# N - No,  The package action is not executed but is kept for later reference
+
+# exec-type
+# I - install
+# P - purge
+# C - comment
+
+# Package-Name
+# The package name can have wildcards
+# space separated packages
+
+
+# CLI PACKAGES
+Y|I|aptitude
+Y|I|htop
+Y|I|ranger
+Y|I|micro
+
+Y|I|openssh-server
+Y|I|samba
+Y|I|net-tools
+
+Y|I|git
+
+Y|I|build-essential
+
+N|I|p7zip-full p7zip-rar
+
+N|I|adb
+
+N|I|zsh
+N|I|zsh-syntax-highlighting
+N|I|zsh-autosuggestions
+N|I|autojump
+
+
+# GUI PACKAGES
+N|I|gparted
+
+N|I|gnome-tweaks
+N|I|gnome-calendar
+N|I|gnome-disk-utility
+
+N|I|libreoffice-writer
+N|I|libreoffice-calc
+N|I|libreoffice-impress
+
+Y|I|copyq
+
+N|I|arduino
+
+N|I|virtualbox
+
+N|I|firefox
+
+N|P|totem.*
+N|I|vlc
+
+N|I|gimp
+N|I|inkscape
+N|P|imagemagick.*
+N|I|audacity
+
+N|P|transmission.*
+N|I|qbittorrent
+N|P|remmina
+
+
+# Have to be installed through deb packages from their official websites
+#N|I|code
+#N|I|google-chrome-stable
+#N|I|zoom
+#N|I|discord
+
+
+# LINUX GAMES
+N|I|0ad
+N|P|gnome-sudoku
+N|P|gnome-mines
+N|P|gnome-mahjongg
+
+
+# DEBLOATING LINUX
+# Purging yelp results in also uninstalling ubuntu-minimal... use with caution.
+N|P|yelp
+N|P|ubuntu-report
+N|P|popularity-contest
+N|P|apport.*
+N|P|whoopsie.*
