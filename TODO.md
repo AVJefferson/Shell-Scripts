@@ -59,12 +59,15 @@
 
 ## PACKAGE (UN)INSTALLER
 
+### Allowing spacing between | separated  commands in the pkg.list file
+
 ### Add Color
 
 ### Add logging file
 * Saved as pkglist.log
   * Date and Time = "\#!date=yyyy-mm-dd--HH-MM-SS"
   * must have a list of installed packages and removed packages under 2 sections.
+  * save only those that actually get installed
 * create another shell called rollback
   * reads a date-time as input
   * Reads a log file and reverts changes till entered date

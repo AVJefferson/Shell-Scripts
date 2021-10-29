@@ -2,6 +2,8 @@
 
 ##SETUP CONFIGURATION
 
+# todo COLOR CODES
+
 # LINUX and APT UPGRADATIONS
 upgradeLinux=false
 upgradeApt=true
@@ -15,9 +17,8 @@ p_manager="aptitude" # Note that apt and aptitude handles regular expressions di
 conf="pkg.list"
 showNMessage=false # N selected commands in .config are not displayed
 
-# CREATING A SNAPSHOT OF EXISTING PACKAGES
-#sudo apt list --installed > 
-
+# todo CREATING A SNAPSHOT OF EXISTING PACKAGES
+#sudo apt list --installed >
 
 # UPDATING EVERYTHING AND GETTING READY
 echo "Linux Install From Config File"
@@ -37,13 +38,11 @@ if $upgradeLinux; then
   sudo apt full-upgrade -y
 fi
 
-
 # INSTALLING REQUIRED PACKAGE MANAGER (if necessary)
 if [ $p_manager != "apt" ]; then
   echo -e "\nInstalling" $p_manager
   sudo apt install $p_manager
 fi
-
 
 # SNAP AND GNOME-STORE
 if $purgeSnap; then
@@ -52,15 +51,14 @@ if $purgeSnap; then
   sudo snap remove snap-store -y
   sudo snap remove gtk-common-themes -y
   sudo snap remove core* -y
-  
+
   sudo rm -rf /var/cache/snapd/
   sudo $p_manager purge snap snapd gnome-software-plugin-snap -y
   sudo rm -rf ~/snap
-  
+
   echo "Blocking snap"
   sudo apt-mark hold snap snapd gnome-software-plugin-snap
-  
-  
+
   if $purgeGnomeStore; then
     echo -e "\nRemoving gnome-store"
     sudo $p_manager purge gnome-software* -y
@@ -69,7 +67,6 @@ if $purgeSnap; then
     sudo $p_manager install gnome-software -y
   fi
 fi
-
 
 # LOOP (UN)INSTALLING PACKAGES (from $conf)
 
@@ -80,51 +77,51 @@ fi
 
 yn="N" # Consecutive Ns and Ys are clubbed.
 
-while IFS= read -r line
-do
+while IFS= read -r line; do
   case $line in
-    [Yy]*) if [ $yn == "N" ]; then
-             echo ""
-             yn="Y"
-           fi
-           
-           cmd=${line:2:1}
-           pkg=${line:4}
-           
-           if [ $cmd == "I" ]; then
-             echo_cmd="Installing"
-             p_cmd="install"
-           elif [ $cmd == "P" ]; then
-             echo_cmd="Removing"
-             p_cmd="purge"
-           elif [ $cmd == "C" ]; then
-             echo -e $pkg
-           fi
-           
-           echo -e $echo_cmd $pkg
-           sudo $p_manager $p_cmd $pkg -y
-           ;;
-    
-    [Nn]*) if $showNMessage; then
-             if [ $yn == "Y" ]; then
-               echo ""
-               yn="N"
-             fi
-    
-             cmd=${line:2:1}
-             pkg=${line:4}
-           
-             if [ $cmd == "I" ]; then
-               echo "Not Installing  " $pkg
-             elif [ $cmd == "P" ]; then
-               echo "Not Removing    " $pkg
-             fi
-           fi
-           ;;
-    *);;
-  esac
-done < $conf
+  [Yy]*)
+    if [ $yn == "N" ]; then
+      echo ""
+      yn="Y"
+    fi
 
+    cmd=${line:2:1}
+    pkg=${line:4}
+
+    if [ $cmd == "I" ]; then
+      echo_cmd="Installing"
+      p_cmd="install"
+    elif [ $cmd == "P" ]; then
+      echo_cmd="Removing"
+      p_cmd="purge"
+    elif [ $cmd == "C" ]; then
+      echo -e $pkg
+    fi
+
+    echo -e $echo_cmd $pkg
+    sudo $p_manager $p_cmd $pkg -y
+    ;;
+
+  [Nn]*)
+    if $showNMessage; then
+      if [ $yn == "Y" ]; then
+        echo ""
+        yn="N"
+      fi
+
+      cmd=${line:2:1}
+      pkg=${line:4}
+
+      if [ $cmd == "I" ]; then
+        echo "Not Installing  " $pkg
+      elif [ $cmd == "P" ]; then
+        echo "Not Removing    " $pkg
+      fi
+    fi
+    ;;
+  *) ;;
+  esac
+done <$conf
 
 # CLEANING UP UNWANTED PACKAGES
 echo -e "\nCleaning Up"
