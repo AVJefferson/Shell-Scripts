@@ -40,7 +40,7 @@ fi
 
 # INSTALLING REQUIRED PACKAGE MANAGER (if necessary)
 if [ $p_manager != "apt" ]; then
-  echo -e "\nInstalling" $p_manager
+  echo -e "\nInstalling Required Package Manager" $p_manager
   sudo apt install $p_manager
 fi
 
