@@ -9,7 +9,11 @@ These Variables are used to customize the way the [bash script](Package%20Instal
 ### LINUX and APT UPGRADATIONS
     upgradeApt=true
     upgradeLinux=false
-    
+
+### COLOR CODE
+    Text_color=$Green   # Comment Color
+    Fail_color=$Red     # Color for No Selected Package Actions
+    PKG_color=$Blue     # Seperate Color for Package Names
 
 ### SNAP STORE REMOVAL
     purgeSnap=false

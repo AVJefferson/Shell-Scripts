@@ -1,11 +1,13 @@
 # TODO LIST
+* 
+# PERSONALIZE LINUX
 
-## PERSONALIZE LINUX
+## BASH
 
-### BASH
-#### backup .bashrc file
+### backup .bashrc file
     cp ~/.bashrc ~/.bashrc.bak
-#### edit .bashrc
+
+### edit .bashrc
     # Better History
     HISTSIZE=10000
     HISTFILESIZE=15000
@@ -19,7 +21,7 @@
     fi
     unset color_prompt force_color_prompt
     
-#### add .bash_aliases
+### add .bash_aliases
     # alias for launching new terminal window
     alias gt="gnome-terminal --"
     alias htop="gnome-terminal --geometry 140x40 -t htop -- sudo htop"
@@ -29,12 +31,12 @@
     # Fast Shutdown and Reboot
     alias shutnow="shutdown now"
 
-### settings
+## settings
 
-### bluetooth
+## bluetooth
 * pair bluetooth headset
 
-### keyboard shortcuts
+## keyboard shortcuts
 * addnew
   * xkill
   * htop
@@ -45,29 +47,41 @@
   * system 4
   * windows 2
 
-### wifi
+## wifi
 * add wifi password to known networks
 
-### samba
-* setup username password
-* "usershare owner only = false" in [global] at smb.conf
+## copyq
+* general
+  * autostart
+  * always on top
+  * close when unfocused
+* history
+  * max items 500
+* notification
+  * bottom right
+* shortcuts
+  * show tray menu -- meta + v
 
-### openssh-server
-* create user and password. rsa private-public key pair may not work with some ssh clients
+## samba
+    sudo smbpasswd -a USERNAME
+    cd /etc/samba/smb.conf
+    cp smb.conf smb.conf.bak
+* "usershare owner only = false" in [global] at [smb.conf](/etc/samba/smb.conf) @ line 169
+* remove/comment print$  @ lines 231-236
 
-### firewall ufw
+## firewall ufw
     sudo ufw enable
     sudo ufw allow Samba
     sudo ufw allow OpenSSH
 
 
-### gnome-extensions
+## gnome-extensions
 * disable ubuntu-dock@ubuntu.com
 
-### ubuntu advantage
+## ubuntu advantage
     ubuntu-advantage disable livepatch
 
-### gnome-tweaks
+## gnome-tweaks
 * general
   * suspend lid close
 * top bar
@@ -78,29 +92,35 @@
     * date
     * seconds
 
-### thonny
+## thonny
 
-### arduino
+## arduino
 
-### flex
+## flex
 
-### bison
+## bison
 
-### mariadb-server
+## mariadb-server
 
-### git
+## git
     git config --global user.name ""
     git config --global user.email ""
     git config --global core.editor ""
 
 
-## PACKAGE (UN)INSTALLER
+# PACKAGE (UN)INSTALLER
 
-### Allowing spacing between | separated  commands in the pkg.list file
+## Better Commands in [pkg.list](Package%20Installer/pkg.list)
+* Allowing spacing between | separated  commands in the pkg.list file
+* Allow # comments after commands
+* Print incorrect commands
+* Add ? \[YN\] for yes or no enquiry during runtime.
+* Allow options to be given to [install.sh](Package%20Installer/install.sh) as arguments
+  * --force-all
+    * force install all packages
+  * -- 
 
-### Add Color
-
-### Add logging file
+## Add logging file
 * Saved as pkglist.log
   * Date and Time = "\#!date=yyyy-mm-dd--HH-MM-SS"
   * must have a list of installed packages and removed packages under 2 sections.
