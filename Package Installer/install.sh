@@ -6,7 +6,7 @@
 Black="\033[0;30m"
 Dark_Gray="\033[1;30m"
 Red="\033[0;31m"
-Light Red="\033[1;31m"
+Light_Red="\033[1;31m"
 Green="\033[0;32m"
 Light_Green="\033[1;32m"
 Brown_Orange="\033[0;33m"
@@ -22,10 +22,9 @@ White="\033[1;37m"
 Clear_color="\033[0m"
 
 # USED COLOR SCHEMES
-Text_color=$Green
-Fail_color=$Red
-PKG_color=$Blue
-
+Text_color=$Green # Comment Color
+Fail_color=$Red   # Fail Color
+PKG_color=$Blue   # Highlight Color
 
 # LINUX and APT UPGRADATIONS
 upgradeLinux=false
@@ -38,10 +37,29 @@ purgeGnomeStore=false
 # PACKAGE INSTALLATION
 p_manager="aptitude" # Note that apt and aptitude handles regular expressions differently
 conf="pkg.list"
+installPkgs=false
 showNMessage=true # N selected commands in .config are not displayed
+notifySend=true   # Show Alert Message after completion
 
 # todo CREATING A SNAPSHOT OF EXISTING PACKAGES
 #sudo apt list --installed >
+
+# todo Option Inputs
+# while [ x"$1" != x ]; do
+#   case $1 in
+#   --forceall)
+#     instcmd=$cpprog
+#     shift
+#     continue
+#     ;;
+
+#   -f=*)
+
+#     shift
+#     continue
+#     ;;
+#   esac
+# done
 
 # UPDATING EVERYTHING AND GETTING READY
 echo -e $Text_color "Linux Install From Config File" $Clear_color
@@ -69,12 +87,19 @@ fi
 
 # SNAP AND GNOME-STORE
 if $purgeSnap; then
-  echo -e $Text_color "\n Removing snap Entirely" $Clear_color
+  echo -e $Text_color "\n Removing snap Packages" $Clear_color
   sudo snap remove firefox -y
   sudo snap remove snap-store -y
   sudo snap remove gtk-common-themes -y
-  sudo snap remove core* -y
+  sudo snap remove gnome-3-34-1804 -y
+  sudo snap remove core18 -y
+  sudo snap remove gnome-3-38-2004 -y
+  sudo snap remove core20 -y
+  sudo snap remove core -y
+  sudo snap remove bare -y
+  sudo snap remove * -y
 
+  echo -e $Text_color "\n Removing snapd" $Clear_color
   sudo rm -rf /var/cache/snapd/
   sudo $p_manager purge snap snapd gnome-software-plugin-snap -y
   sudo rm -rf ~/snap
@@ -99,55 +124,60 @@ fi
 # echo -e $Text_color "\nUsing the latest configuration file" $Clear_color
 
 yn="N" # Consecutive Ns and Ys are clubbed.
-
-while IFS= read -r line; do
-  case $line in
-  [Yy]*)
-    if [ $yn == "N" ]; then
-      echo ""
-      yn="Y"
-    fi
-
-    cmd=${line:2:1}
-    pkg=${line:4}
-
-    if [ $cmd == "I" ]; then
-      echo_cmd="Installing"
-      p_cmd="install"
-    elif [ $cmd == "P" ]; then
-      echo_cmd="Removing"
-      p_cmd="purge"
-    elif [ $cmd == "C" ]; then
-      echo -e $Text_color $pkg $Clear_color
-    fi
-
-    echo -e $Text_color $echo_cmd $PKG_color $pkg $Clear_color
-    sudo $p_manager $p_cmd $pkg -y
-    ;;
-
-  [Nn]*)
-    if $showNMessage; then
-      if [ $yn == "Y" ]; then
+if $installPkgs; then
+  while IFS= read -r line; do
+    case $line in
+    [Yy]*)
+      if [ $yn == "N" ]; then
         echo ""
-        yn="N"
+        yn="Y"
       fi
 
       cmd=${line:2:1}
       pkg=${line:4}
 
       if [ $cmd == "I" ]; then
-        echo -e $Fail_color "Not Installing  " $PKG_color $pkg $Clear_color
+        echo_cmd="Installing"
+        p_cmd="install"
       elif [ $cmd == "P" ]; then
-        echo -e $Fail_color "Not Removing    " $PKG_color $pkg $Clear_color
+        echo_cmd="Removing"
+        p_cmd="purge"
+      elif [ $cmd == "C" ]; then
+        echo -e $Text_color $pkg $Clear_color
       fi
-    fi
-    ;;
-  *) ;;
-  esac
-done <$conf
+
+      echo -e $Text_color $echo_cmd $PKG_color $pkg $Clear_color
+      sudo $p_manager $p_cmd $pkg -y
+      ;;
+
+    [Nn]*)
+      if $showNMessage; then
+        if [ $yn == "Y" ]; then
+          echo ""
+          yn="N"
+        fi
+
+        cmd=${line:2:1}
+        pkg=${line:4}
+
+        if [ $cmd == "I" ]; then
+          echo -e $Fail_color "Not Installing  " $PKG_color $pkg $Clear_color
+        elif [ $cmd == "P" ]; then
+          echo -e $Fail_color "Not Removing    " $PKG_color $pkg $Clear_color
+        fi
+      fi
+      ;;
+    *) ;;
+    esac
+  done <$conf
+fi
 
 # CLEANING UP UNWANTED PACKAGES
 echo -e $Text_color "\n Cleaning Up" $Clear_color
 sudo apt autoremove -y
 sudo apt autoclean -y
 echo ""
+
+if $notifySend; then
+  notify-send "Shell Installation Complete"
+fi

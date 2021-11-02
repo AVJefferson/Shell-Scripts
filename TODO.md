@@ -118,7 +118,10 @@
 * Allow options to be given to [install.sh](Package%20Installer/install.sh) as arguments
   * --force-all
     * force install all packages
-  * -- 
+
+## Read error/success from package manager
+
+## Alerts for completed Commands
 
 ## Add logging file
 * Saved as pkglist.log
