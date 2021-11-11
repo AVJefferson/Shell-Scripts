@@ -17,19 +17,19 @@
 
 
 # CLI PACKAGES
-Y|I|aptitude
-Y|I|htop
-Y|I|ranger
-Y|I|micro
+N|I|aptitude
+N|I|htop
+N|I|ranger
+N|I|micro
 
-Y|I|openssh-server
-Y|I|samba
-Y|I|net-tools
+N|I|openssh-server
+N|I|samba
+N|I|net-tools
 
 Y|I|git
-Y|I|build-essential
-Y|I|libncursesw5-dev libncurses5-dev
-Y|I|python3-pip
+N|I|build-essential
+N|I|libncursesw5-dev libncurses5-dev
+N|I|python3-pip
 
 N|I|p7zip-full p7zip-rar
 
@@ -49,18 +49,18 @@ N|I|bison
 
 
 # GUI PACKAGES
-Y|I|gparted
-Y|I|usb-creator-gtk
+N|I|gparted
+N|I|usb-creator-gtk
 
-Y|I|gnome-tweaks
-Y|I|gnome-calendar
-Y|I|gnome-disk-utility
+N|I|gnome-tweaks
+N|I|gnome-calendar
+N|I|gnome-disk-utility
 
-Y|I|libreoffice-writer
-Y|I|libreoffice-calc
-Y|I|libreoffice-impress
+N|I|libreoffice-writer
+N|I|libreoffice-calc
+N|I|libreoffice-impress
 
-Y|I|copyq
+N|I|copyq
 
 N|I|arduino
 
@@ -81,7 +81,7 @@ Y|I|qbittorrent
 N|P|remmina
 
 ## LINUX GAMES
-Y|I|0ad
+N|I|0ad
 N|P|gnome-sudoku
 N|P|gnome-mines
 N|P|gnome-mahjongg

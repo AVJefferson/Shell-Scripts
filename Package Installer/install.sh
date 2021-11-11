@@ -22,13 +22,21 @@ White="\033[1;37m"
 Clear_color="\033[0m"
 
 # USED COLOR SCHEMES
-Text_color=$Green # Comment Color
-Fail_color=$Red   # Fail Color
-PKG_color=$Blue   # Highlight Color
+Text_color=$Green     # Comment Color
+Fail_color=$Red       # Fail Color
+PKG_color=$Light_Blue # Highlight Color
+
+function printText {
+  echo -e "$Text_color$1$Clear_color"
+}
+
+function printFail {
+  echo -e "$Fail_color$1$Clear_color"
+}
 
 # LINUX and APT UPGRADATIONS
-upgradeLinux=false
 upgradeApt=true
+upgradeLinux=false
 
 # SNAP STORE REMOVAL
 purgeSnap=false
@@ -36,58 +44,50 @@ purgeGnomeStore=false
 
 # PACKAGE INSTALLATION
 p_manager="aptitude" # Note that apt and aptitude handles regular expressions differently
+p_installcmd="install -y"
+p_uninstall_cmd="purge -y"
+
 conf="pkg.list"
-installPkgs=false
+installPkgs=true
+
 showNMessage=true # N selected commands in .config are not displayed
 notifySend=true   # Show Alert Message after completion
 
-# todo CREATING A SNAPSHOT OF EXISTING PACKAGES
-#sudo apt list --installed >
+# Allowed Commands in $conf file
+declare -A conf_cmds
+conf_cmds=(["I"]="$p_manager $p_installcmd" ["P"]="$p_manager $p_uninstall_cmd")
+conf_cmts=(["I"]="Installing" ["P"]="Removing" ["N"]="Not" ["Y"]="")
 
-# todo Option Inputs
-# while [ x"$1" != x ]; do
-#   case $1 in
-#   --forceall)
-#     instcmd=$cpprog
-#     shift
-#     continue
-#     ;;
-
-#   -f=*)
-
-#     shift
-#     continue
-#     ;;
-#   esac
-# done
+# CHECKING FOR ROOT PERMISSION
+printText "Linux Package Installer Script - User Id: $EUID"
+if [ $EUID != "0" ]; then
+  printFail "This script must be run with root privilages\n"
+  exit 1
+fi
 
 # UPDATING EVERYTHING AND GETTING READY
-echo -e $Text_color "Linux Install From Config File" $Clear_color
-sudo echo # Asking for sudo permissions
-echo -e $Text_color "Update apt" $Clear_color
+printText "Update apt"
 sudo apt update -y
-# sudo apt-get update -y
 
 if $upgradeApt; then
-  echo -e $Text_color "\n Upgrade apt" $Clear_color
+  printText "\nUpgrade apt"
   sudo apt upgrade -y
-# sudo apt-get upgrade -y
 fi
 
 if $upgradeLinux; then
-  echo -e $Text_color "\n Updating Linux" $Clear_color
+  printText "\nUpdating Linux"
   sudo apt full-upgrade -y
 fi
 
 # INSTALLING REQUIRED PACKAGE MANAGER (if necessary)
 if [ $p_manager != "apt" ]; then
-  echo -e $Text_color "\n Installing Required Package Manager" $PKG_color $p_manager $Clear_color
+  printText "\nInstalling Required Package Manager $PKG_color$p_manager"
   sudo apt install $p_manager
 fi
 
 # SNAP AND GNOME-STORE
 if $purgeSnap; then
-  echo -e $Text_color "\n Removing snap Packages" $Clear_color
+  printText "\n Removing snap Packages"
   sudo snap remove firefox -y
   sudo snap remove snap-store -y
   sudo snap remove gtk-common-themes -y
@@ -99,19 +99,19 @@ if $purgeSnap; then
   sudo snap remove bare -y
   sudo snap remove * -y
 
-  echo -e $Text_color "\n Removing snapd" $Clear_color
+  printText "\n Removing snapd"
   sudo rm -rf /var/cache/snapd/
   sudo $p_manager purge snap snapd gnome-software-plugin-snap -y
   sudo rm -rf ~/snap
 
-  echo -e $Text_color "Blocking snap" $Clear_color
+  printText "Blocking snap"
   sudo apt-mark hold snap snapd gnome-software-plugin-snap
 
   if $purgeGnomeStore; then
-    echo -e $Text_color "\n Removing gnome-store" $Clear_color
+    printText "\n Removing gnome-store"
     sudo $p_manager purge gnome-software* -y
   else
-    echo -e $Text_color "\n Re-Installing gnome-store" $Clear_color
+    printText "\n Re-Installing gnome-store"
     sudo $p_manager install gnome-software -y
   fi
 fi
@@ -119,9 +119,9 @@ fi
 # LOOP (UN)INSTALLING PACKAGES (from $conf)
 
 # # To edit the configuration file before executing it
-# echo -e $Text_color "\nOpening configuration file" $Clear_color
+# printText "\nOpening configuration file"
 # sudo gedit $conf
-# echo -e $Text_color "\nUsing the latest configuration file" $Clear_color
+# printText "\nUsing the latest configuration file"
 
 yn="N" # Consecutive Ns and Ys are clubbed.
 if $installPkgs; then
@@ -143,17 +143,17 @@ if $installPkgs; then
         echo_cmd="Removing"
         p_cmd="purge"
       elif [ $cmd == "C" ]; then
-        echo -e $Text_color $pkg $Clear_color
+        printText $pkg
+        continue
       fi
 
-      echo -e $Text_color $echo_cmd $PKG_color $pkg $Clear_color
+      printText "$echo_cmd $PKG_color$pkg"
       sudo $p_manager $p_cmd $pkg -y
       ;;
 
     [Nn]*)
       if $showNMessage; then
         if [ $yn == "Y" ]; then
-          echo ""
           yn="N"
         fi
 
@@ -161,9 +161,9 @@ if $installPkgs; then
         pkg=${line:4}
 
         if [ $cmd == "I" ]; then
-          echo -e $Fail_color "Not Installing  " $PKG_color $pkg $Clear_color
+          printFail "Not Installing\t$PKG_color$pkg"
         elif [ $cmd == "P" ]; then
-          echo -e $Fail_color "Not Removing    " $PKG_color $pkg $Clear_color
+          printFail "Not Removing\t$PKG_color$pkg"
         fi
       fi
       ;;
@@ -173,7 +173,7 @@ if $installPkgs; then
 fi
 
 # CLEANING UP UNWANTED PACKAGES
-echo -e $Text_color "\n Cleaning Up" $Clear_color
+printText "\nCleaning Up"
 sudo apt autoremove -y
 sudo apt autoclean -y
 echo ""
