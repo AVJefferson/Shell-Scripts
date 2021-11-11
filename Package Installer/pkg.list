@@ -28,6 +28,8 @@ Y|I|net-tools
 
 Y|I|git
 Y|I|build-essential
+Y|I|libncursesw5-dev libncurses5-dev
+Y|I|python3-pip
 
 N|I|p7zip-full p7zip-rar
 
@@ -47,15 +49,16 @@ N|I|bison
 
 
 # GUI PACKAGES
-N|I|gparted
+Y|I|gparted
+Y|I|usb-creator-gtk
 
-N|I|gnome-tweaks
-N|I|gnome-calendar
-N|I|gnome-disk-utility
+Y|I|gnome-tweaks
+Y|I|gnome-calendar
+Y|I|gnome-disk-utility
 
-N|I|libreoffice-writer
-N|I|libreoffice-calc
-N|I|libreoffice-impress
+Y|I|libreoffice-writer
+Y|I|libreoffice-calc
+Y|I|libreoffice-impress
 
 Y|I|copyq
 
@@ -66,7 +69,7 @@ N|I|virtualbox
 N|I|firefox
 
 N|P|totem.*
-N|I|vlc
+Y|I|vlc
 
 N|I|gimp
 N|I|inkscape
@@ -74,11 +77,11 @@ N|P|imagemagick.*
 N|I|audacity
 
 N|P|transmission.*
-N|I|qbittorrent
+Y|I|qbittorrent
 N|P|remmina
 
 ## LINUX GAMES
-N|I|0ad
+Y|I|0ad
 N|P|gnome-sudoku
 N|P|gnome-mines
 N|P|gnome-mahjongg

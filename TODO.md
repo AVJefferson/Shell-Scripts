@@ -76,7 +76,7 @@
 
 
 ## gnome-extensions
-* disable ubuntu-dock@ubuntu.com
+    gnome-entensions disable ubuntu-dock@ubuntu.com
 
 ## ubuntu advantage
     ubuntu-advantage disable livepatch
@@ -106,6 +106,16 @@
     git config --global user.name ""
     git config --global user.email ""
     git config --global core.editor ""
+
+    gpg --default-new-key-algo rsa4096 --gen-key
+    gpg --list-secret-keys --keyid-format=long
+    gpg --armor --export PRIVATE-ID
+    git config --global user.signingkey PRIVATE-ID
+    git config --global commit.gpgsign true
+
+## python
+    sudo pip install Discord
+    sudo pip install eyeD3
 
 
 # PACKAGE (UN)INSTALLER

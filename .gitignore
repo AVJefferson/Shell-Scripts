@@ -1,2 +1,6 @@
 Deprecated/*
 .test/*
+Personalize/.bashrc
+Personalize/.bash_aliases
+Personalize/.gitconfig
+Personalize/smb.conf

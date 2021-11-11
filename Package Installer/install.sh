@@ -179,5 +179,5 @@ sudo apt autoclean -y
 echo ""
 
 if $notifySend; then
-  notify-send "Shell Installation Complete"
+  notify-send -u normal "Shell Installation Complete"
 fi
