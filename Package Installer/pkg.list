@@ -7,14 +7,12 @@
 # exec-type
 # I - install
 # P - purge
-# C - comment
 
 # Package-Name
 # The package name can have wildcards
 # space separated packages
 
-
-
+N|R|ppa:xyz
 
 # CLI PACKAGES
 N|I|aptitude

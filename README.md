@@ -37,10 +37,9 @@ Packages are to be listed as `[YN] [IPC] package-name`. They should be written i
 * [**YN**] - YES or NO
   * Y - Yes, The action is executed.
   * N - No,  The action is not executed but is kept for later reference. If $showNMessage is set to true then these packages are displayed but not executed.
-* [**IPC**] - INSTALL or PURGE or COMMENT
+* [**IP**] - INSTALL or PURGE or COMMENT
   * I - Install, Installs the package (if Yes Selected).
   * P - Purge, Uninstalls the package (if Yes Selected).
-  * C - Comment, Prints (echo) the content to terminal.
 * package-name - Self explanatory. Wild Cards are also allowed.
 
 

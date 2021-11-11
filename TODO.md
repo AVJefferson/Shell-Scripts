@@ -123,15 +123,19 @@
 ## Better Commands in [pkg.list](Package%20Installer/pkg.list)
 * Allowing spacing between | separated  commands in the pkg.list file
 * Allow # comments after commands
-* Print incorrect commands
+* Print invalid commands
 * Add ? \[YN\] for yes or no enquiry during runtime.
 * Allow options to be given to [install.sh](Package%20Installer/install.sh) as arguments
   * --force-all
     * force install all packages
+* Support for commmands like
+  * curl
+  * wget
+  * add-apt-repository
 
 ## Read error/success from package manager
 
-## Alerts for completed Commands
+## Snap remove everything from list
 
 ## Add logging file
 * Saved as pkglist.log

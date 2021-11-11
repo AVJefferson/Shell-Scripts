@@ -1,7 +1,5 @@
 #!/bin/bash
 
-##SETUP CONFIGURATION
-
 # AVAILABLE COLOR CODES
 Black="\033[0;30m"
 Dark_Gray="\033[1;30m"
@@ -34,32 +32,41 @@ function printFail {
   echo -e "$Fail_color$1$Clear_color"
 }
 
+#* SETUP CONFIGURATION
 # LINUX and APT UPGRADATIONS
 upgradeApt=true
-upgradeLinux=false
+upgradeLinux=true
 
 # SNAP STORE REMOVAL
 purgeSnap=false
 purgeGnomeStore=false
 
 # PACKAGE INSTALLATION
-p_manager="aptitude" # Note that apt and aptitude handles regular expressions differently
-p_installcmd="install -y"
-p_uninstall_cmd="purge -y"
+p_mgr="aptitude" # Note that apt and aptitude handles regular expressions differently
+add_repos="add-apt-repository"
 
-conf="pkg.list"
+config="pkg.list"
 installPkgs=true
 
 showNMessage=true # N selected commands in .config are not displayed
 notifySend=true   # Show Alert Message after completion
 
-# Allowed Commands in $conf file
+# Allowed Commands in $config file
 declare -A conf_cmds
-conf_cmds=(["I"]="$p_manager $p_installcmd" ["P"]="$p_manager $p_uninstall_cmd")
-conf_cmts=(["I"]="Installing" ["P"]="Removing" ["N"]="Not" ["Y"]="")
+conf_cmds[I]="$p_mgr install -y"
+conf_cmds[P]="$p_mgr purge -y"
+conf_cmds[R]="$add_repos -y"
+conf_cmds[U]="$p_mgr update"
 
+# Comments to be used for each command
+declare -A conf_cmts
+conf_cmts["I"]="Installing"
+conf_cmts["P"]="Removing"
+conf_cmts["R"]="Adding repo"
+
+#* EXECUTION BEGINS HERE
 # CHECKING FOR ROOT PERMISSION
-printText "Linux Package Installer Script - User Id: $EUID"
+printText "Linux Package Installer Script"
 if [ $EUID != "0" ]; then
   printFail "This script must be run with root privilages\n"
   exit 1
@@ -80,14 +87,15 @@ if $upgradeLinux; then
 fi
 
 # INSTALLING REQUIRED PACKAGE MANAGER (if necessary)
-if [ $p_manager != "apt" ]; then
-  printText "\nInstalling Required Package Manager $PKG_color$p_manager"
-  sudo apt install $p_manager
+if [ $p_mgr != "apt" ]; then
+  printText "\nInstalling Required Package Manager $PKG_color$p_mgr"
+  sudo apt install $p_mgr
+  echo ""
 fi
 
 # SNAP AND GNOME-STORE
 if $purgeSnap; then
-  printText "\n Removing snap Packages"
+  printText "\nRemoving snap Packages"
   sudo snap remove firefox -y
   sudo snap remove snap-store -y
   sudo snap remove gtk-common-themes -y
@@ -99,29 +107,28 @@ if $purgeSnap; then
   sudo snap remove bare -y
   sudo snap remove * -y
 
-  printText "\n Removing snapd"
+  printText "Removing snapd"
   sudo rm -rf /var/cache/snapd/
-  sudo $p_manager purge snap snapd gnome-software-plugin-snap -y
+  sudo $p_mgr purge snap snapd gnome-software-plugin-snap -y
   sudo rm -rf ~/snap
 
   printText "Blocking snap"
   sudo apt-mark hold snap snapd gnome-software-plugin-snap
 
   if $purgeGnomeStore; then
-    printText "\n Removing gnome-store"
-    sudo $p_manager purge gnome-software* -y
+    printText "\nRemoving gnome-store"
+    sudo $p_mgr purge gnome-software* -y
   else
-    printText "\n Re-Installing gnome-store"
-    sudo $p_manager install gnome-software -y
+    printText "\nRe-Installing gnome-store"
+    sudo $p_mgr install gnome-software -y
   fi
 fi
 
-# LOOP (UN)INSTALLING PACKAGES (from $conf)
+# LOOP (UN)INSTALLING PACKAGES (from $config)
 
 # # To edit the configuration file before executing it
 # printText "\nOpening configuration file"
-# sudo gedit $conf
-# printText "\nUsing the latest configuration file"
+# sudo gedit $config
 
 yn="N" # Consecutive Ns and Ys are clubbed.
 if $installPkgs; then
@@ -136,19 +143,8 @@ if $installPkgs; then
       cmd=${line:2:1}
       pkg=${line:4}
 
-      if [ $cmd == "I" ]; then
-        echo_cmd="Installing"
-        p_cmd="install"
-      elif [ $cmd == "P" ]; then
-        echo_cmd="Removing"
-        p_cmd="purge"
-      elif [ $cmd == "C" ]; then
-        printText $pkg
-        continue
-      fi
-
-      printText "$echo_cmd $PKG_color$pkg"
-      sudo $p_manager $p_cmd $pkg -y
+      printText "${conf_cmts[$cmd]} $PKG_color$pkg"
+      sudo ${conf_cmds[$cmd]} $pkg
       ;;
 
     [Nn]*)
@@ -160,16 +156,12 @@ if $installPkgs; then
         cmd=${line:2:1}
         pkg=${line:4}
 
-        if [ $cmd == "I" ]; then
-          printFail "Not Installing\t$PKG_color$pkg"
-        elif [ $cmd == "P" ]; then
-          printFail "Not Removing\t$PKG_color$pkg"
-        fi
+        printFail "Not ${conf_cmts[$cmd]}\t$PKG_color$pkg"
       fi
       ;;
     *) ;;
     esac
-  done <$conf
+  done <$config
 fi
 
 # CLEANING UP UNWANTED PACKAGES
@@ -178,6 +170,7 @@ sudo apt autoremove -y
 sudo apt autoclean -y
 echo ""
 
+# NOTIFICATION FOR COMPLETION
 if $notifySend; then
   notify-send -u normal "Shell Installation Complete"
 fi
