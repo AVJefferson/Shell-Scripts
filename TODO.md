@@ -74,13 +74,6 @@
     sudo ufw allow Samba
     sudo ufw allow OpenSSH
 
-
-## gnome-extensions
-    gnome-entensions disable ubuntu-dock@ubuntu.com
-
-## ubuntu advantage
-    ubuntu-advantage disable livepatch
-
 ## gnome-tweaks
 * general
   * suspend lid close

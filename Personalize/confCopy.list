@@ -1,0 +1,5 @@
+Config Files/.bash_aliases  ~
+Config Files/.bashrc        ~
+Config Files/.gitconfig     ~
+Config Files/smb.conf       /etc/samba
+# Necessary Extra Line

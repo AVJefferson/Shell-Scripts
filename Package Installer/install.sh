@@ -38,20 +38,20 @@ upgradeApt=true
 upgradeLinux=true
 
 # SNAP STORE REMOVAL
-purgeSnap=false
+purgeSnap=true
 purgeGnomeStore=false
 
 # PACKAGE INSTALLATION
 p_mgr="aptitude" # Note that apt and aptitude handles regular expressions differently
 add_repos="add-apt-repository"
 
-config="pkg.list"
-installPkgs=true
+configFile="pkg.list"
+installPkgs=false
 
-showNMessage=true # N selected commands in .config are not displayed
+showNMessage=true # N selected commands in $configFile are not displayed
 notifySend=true   # Show Alert Message after completion
 
-# Allowed Commands in $config file
+# Allowed Commands in $configFile
 declare -A conf_cmds
 conf_cmds[I]="$p_mgr install -y"
 conf_cmds[P]="$p_mgr purge -y"
@@ -95,19 +95,7 @@ fi
 
 # SNAP AND GNOME-STORE
 if $purgeSnap; then
-  printText "\nRemoving snap Packages"
-  sudo snap remove firefox -y
-  sudo snap remove snap-store -y
-  sudo snap remove gtk-common-themes -y
-  sudo snap remove gnome-3-34-1804 -y
-  sudo snap remove core18 -y
-  sudo snap remove gnome-3-38-2004 -y
-  sudo snap remove core20 -y
-  sudo snap remove core -y
-  sudo snap remove bare -y
-  sudo snap remove * -y
-
-  printText "Removing snapd"
+  printText "\nRemoving snapd and all snap packages"
   sudo rm -rf /var/cache/snapd/
   sudo $p_mgr purge snap snapd gnome-software-plugin-snap -y
   sudo rm -rf ~/snap
@@ -124,11 +112,11 @@ if $purgeSnap; then
   fi
 fi
 
-# LOOP (UN)INSTALLING PACKAGES (from $config)
+# LOOP (UN)INSTALLING PACKAGES (from $configFile)
 
 # # To edit the configuration file before executing it
 # printText "\nOpening configuration file"
-# sudo gedit $config
+# sudo gedit $configFile
 
 yn="N" # Consecutive Ns and Ys are clubbed.
 if $installPkgs; then
@@ -161,7 +149,7 @@ if $installPkgs; then
       ;;
     *) ;;
     esac
-  done <$config
+  done <$configFile
 fi
 
 # CLEANING UP UNWANTED PACKAGES
