@@ -46,7 +46,7 @@ p_mgr="aptitude" # Note that apt and aptitude handles regular expressions differ
 add_repos="add-apt-repository"
 
 configFile="pkg.list"
-installPkgs=false
+installPkgs=true
 
 showNMessage=true # N selected commands in $configFile are not displayed
 notifySend=true   # Show Alert Message after completion
@@ -89,7 +89,7 @@ fi
 # INSTALLING REQUIRED PACKAGE MANAGER (if necessary)
 if [ $p_mgr != "apt" ]; then
   printText "\nInstalling Required Package Manager $PKG_color$p_mgr"
-  sudo apt install $p_mgr
+  sudo apt install $p_mgr -y
   echo ""
 fi
 
