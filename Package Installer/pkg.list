@@ -12,22 +12,23 @@
 # The package name can have wildcards
 # space separated packages
 
-N|R|ppa:xyz
 
-# CLI PACKAGES
-N|I|aptitude
-N|I|htop
-N|I|ranger
-N|I|micro
 
-N|I|openssh-server
-N|I|samba
-N|I|net-tools
+
+## CLI PACKAGES
+Y|I|aptitude
+Y|I|htop
+Y|I|ranger
+Y|I|micro
+
+Y|I|openssh-server
+Y|I|samba
+Y|I|net-tools
 
 Y|I|git
-N|I|build-essential
-N|I|libncursesw5-dev libncurses5-dev
-N|I|python3-pip
+Y|I|build-essential
+Y|I|libncursesw5-dev libncurses5-dev
+Y|I|python3-pip python3-venv
 
 N|I|p7zip-full p7zip-rar
 
@@ -40,25 +41,25 @@ N|I|autojump
 
 ## 5th sem lab requirements
 N|I|mariadb-server
-N|I|flex
-N|I|bison
+Y|I|flex
+Y|I|bison
 
 
 
 
-# GUI PACKAGES
-N|I|gparted
+## GUI PACKAGES
+Y|I|gparted
 N|I|usb-creator-gtk
 
-N|I|gnome-tweaks
-N|I|gnome-calendar
-N|I|gnome-disk-utility
+Y|I|gnome-tweaks
+Y|I|gnome-calendar
+Y|I|gnome-disk-utility
 
-N|I|libreoffice-writer
-N|I|libreoffice-calc
-N|I|libreoffice-impress
+Y|I|libreoffice-writer
+Y|I|libreoffice-calc
+Y|I|libreoffice-impress
 
-N|I|copyq
+Y|I|copyq
 
 N|I|arduino
 
@@ -78,29 +79,35 @@ N|P|transmission.*
 Y|I|qbittorrent
 N|P|remmina
 
+
+
+
 ## LINUX GAMES
-N|I|0ad
-N|P|gnome-sudoku
-N|P|gnome-mines
-N|P|gnome-mahjongg
+Y|I|0ad
+Y|P|gnome-sudoku
+Y|P|gnome-mines
+Y|P|gnome-mahjongg
 
 
 
 
 ## Have to be installed through deb packages from their official websites
-#N|I|code
-#N|I|google-chrome-stable
-#N|I|zoom
-#N|I|discord
+N|I|apt-transport-https curl wget software-properties-common
+
+N|I|code
+N|I|google-chrome-stable
+N|I|brave-browser
+N|I|zoom
+N|I|discord
 
 
 
 
-# DEBLOATING LINUX
+## DEBLOATING LINUX
 # Purging yelp results in also uninstalling ubuntu-minimal... use with caution.
-N|P|yelp
-N|P|ubuntu-report
-N|P|popularity-contest
-N|P|apport.*
-N|P|whoopsie.*
+Y|P|yelp
+Y|P|ubuntu-report
+Y|P|popularity-contest
+Y|P|apport.*
+Y|P|whoopsie.*
 # Necessary Extra Line
